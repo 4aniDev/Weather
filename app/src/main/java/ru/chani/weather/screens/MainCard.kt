@@ -2,6 +2,7 @@ package ru.chani.weather.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -140,10 +141,13 @@ fun TabLayout() {
         ) { index ->
             when (index) {
                 0 -> {
-                    AsyncImage(
-                        model = "https://tmcars.info/tmcars/images/original/2023/03/13/10/46/1ae136fb-df0f-4c6d-b014-71aaaf8b6d62.jpg",
-                        contentDescription = "car"
-                    )
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(20) {
+                            ru.chani.weather.ListItem()
+                        }
+                    }
                 }
                 1 -> {
                     AsyncImage(
