@@ -12,12 +12,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import ru.chani.weather.domain.models.WeatherModel
 import ru.chani.weather.ui.theme.Purple700
 import ru.chani.weather.ui.theme.WhiteLight
 
-@Preview(showBackground = true)
 @Composable
-fun ListItem() {
+fun ListItem(item: WeatherModel) {
     Card(
         modifier = Modifier
             .padding(top = 5.dp)
@@ -33,11 +33,18 @@ fun ListItem() {
         )
         {
             Column {
-                Text(text = "12:00")
-                Text(text = "Sunday", color = Purple700)
+                Text(text = item.time)
+                Text(text = item.condition, color = Purple700)
             }
-            Text(text = "25°C", fontSize = 30.sp)
-            AsyncImage(model = "https://cdn.weatherapi.com/weather/64x64/day/116.png", contentDescription = "", modifier = Modifier.size(50.dp))
+            Text(
+                text = item.currentTemp.ifEmpty { "${item.maxTemp} / ${item.minTemp}" },
+                fontSize = 30.sp
+            )
+            AsyncImage(
+                model = "https:${item.icon}",
+                contentDescription = "",
+                modifier = Modifier.size(50.dp)
+            )
         }
     }
 

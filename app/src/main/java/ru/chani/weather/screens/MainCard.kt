@@ -1,17 +1,15 @@
 package ru.chani.weather.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +22,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import ru.chani.weather.R
-import ru.chani.weather.ui.theme.BlueLight
+import ru.chani.weather.domain.models.WeatherModel
 import ru.chani.weather.ui.theme.WhiteLight
 
 @Preview
@@ -104,7 +102,7 @@ fun MainCard() {
 fun TabLayout() {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
-    val tabIndex = pagerState.currentPage
+    val selectedTabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -113,10 +111,10 @@ fun TabLayout() {
             .clip(RoundedCornerShape(5.dp))
     ) {
         TabRow(
-            selectedTabIndex = tabIndex,
-            indicator = { position ->
+            selectedTabIndex = selectedTabIndex,
+            indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
-                    Modifier.pagerTabIndicatorOffset(pagerState, position)
+                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                 )
             },
             backgroundColor = WhiteLight
@@ -144,8 +142,32 @@ fun TabLayout() {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        items(20) {
-                            ru.chani.weather.ListItem()
+                        itemsIndexed(
+//                            FAKE-DATA
+                            listOf(
+                                WeatherModel(
+                                    "Ashgabat",
+                                    "10:00",
+                                    "24°C",
+                                    "Sunny",
+                                    "//cdn.weatherapi.com/weather/64x64/day/116.png",
+                                    "40°C",
+                                    "24°C",
+                                    ""
+                                ),
+                                WeatherModel(
+                                    "Ashgabat",
+                                    "12:00",
+                                    "18°C",
+                                    "Sunny",
+                                    "//cdn.weatherapi.com/weather/64x64/day/116.png",
+                                    "40°C",
+                                    "24°C",
+                                    ""
+                                )
+                            )
+                        ) { _, item ->
+                            ru.chani.weather.ListItem(item = item)
                         }
                     }
                 }
