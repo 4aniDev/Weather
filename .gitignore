@@ -5,6 +5,7 @@
 .DS_Store
 /build
 /captures
+app/src/main/java/ru/chani/weather/API.kt
 .externalNativeBuild
 .cxx
 local.properties
