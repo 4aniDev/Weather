@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,7 +100,7 @@ fun MainCard() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout() {
+fun TabLayout(stateOfDaysList: MutableState<List<WeatherModel>>) {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val selectedTabIndex = pagerState.currentPage
@@ -143,29 +144,7 @@ fun TabLayout() {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         itemsIndexed(
-//                            FAKE-DATA
-                            listOf(
-                                WeatherModel(
-                                    "Ashgabat",
-                                    "10:00",
-                                    "24°C",
-                                    "Sunny",
-                                    "//cdn.weatherapi.com/weather/64x64/day/116.png",
-                                    "40°C",
-                                    "24°C",
-                                    ""
-                                ),
-                                WeatherModel(
-                                    "Ashgabat",
-                                    "12:00",
-                                    "18°C",
-                                    "Sunny",
-                                    "//cdn.weatherapi.com/weather/64x64/day/116.png",
-                                    "40°C",
-                                    "24°C",
-                                    ""
-                                )
-                            )
+                            stateOfDaysList.value
                         ) { _, item ->
                             ru.chani.weather.ListItem(item = item)
                         }
