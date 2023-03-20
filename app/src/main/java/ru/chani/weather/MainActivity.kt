@@ -27,14 +27,17 @@ import ru.chani.weather.ui.theme.WeatherTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+                super.onCreate(savedInstanceState)
         setContent {
             WeatherTheme() {
 //                for testing
                 val stateOfDaysList = remember {
                     mutableStateOf(listOf<WeatherModel>())
                 }
-                getData("London", this, stateOfDaysList)
+                val sateOfCurrentDay = remember {
+                    mutableStateOf(DEFAULT_WEATHER_MODEL)
+                }
+                getData("London", this, stateOfDaysList, sateOfCurrentDay)
 
                 Image(
                     painter = painterResource(id = R.drawable.bg),
@@ -45,16 +48,28 @@ class MainActivity : ComponentActivity() {
                         .alpha(0.8f)
                 )
                 Column() {
-                    MainCard()
+                    MainCard(sateOfCurrentDay)
                     TabLayout(stateOfDaysList)
                 }
             }
         }
     }
+
+    companion object {
+        private val DEFAULT_WEATHER_MODEL = WeatherModel(
+            "", "", "", "", "", "", "", ""
+        )
+    }
 }
 
+
 //for testing
-private fun getData(city: String, context: Context, stateOfDaysList: MutableState<List<WeatherModel>>) {
+private fun getData(
+    city: String,
+    context: Context,
+    stateOfDaysList: MutableState<List<WeatherModel>>,
+    sateOfCurrentDay: MutableState<WeatherModel>
+) {
     val url = "https://api.weatherapi.com/v1/forecast.json?key=" +
             API_KEY
     "&q=${city}" +
@@ -69,6 +84,9 @@ private fun getData(city: String, context: Context, stateOfDaysList: MutableStat
         { response ->
             val list = getWeatherByDays(response)
             stateOfDaysList.value = list
+
+            val toDay = list[0]
+            sateOfCurrentDay.value = toDay
         },
         { error ->
             Log.d("LOGGG", error.toString())

@@ -26,9 +26,8 @@ import ru.chani.weather.R
 import ru.chani.weather.domain.models.WeatherModel
 import ru.chani.weather.ui.theme.WhiteLight
 
-@Preview
 @Composable
-fun MainCard() {
+fun MainCard(sateOfCurrentDay: MutableState<WeatherModel>) {
     Column(
         modifier = Modifier.padding(5.dp)
     ) {
@@ -48,11 +47,11 @@ fun MainCard() {
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                        text = "01.03.2023",
+                        text = sateOfCurrentDay.value.time,
                         style = TextStyle(fontSize = 15.sp)
                     )
                     AsyncImage(
-                        model = "https://turkmenportal.com/themes/turkmenportal/img/logo_tp.png",
+                        model = "https:${sateOfCurrentDay.value.icon}",
                         contentDescription = "icon",
                         modifier = Modifier
                             .size(60.dp)
@@ -61,15 +60,19 @@ fun MainCard() {
 
                 }
                 Text(
-                    text = "Ashgabat",
+                    text = sateOfCurrentDay.value.city,
                     style = TextStyle(fontSize = 24.sp),
                 )
                 Text(
-                    text = "45°C",
+                    text = if (sateOfCurrentDay.value.currentTemp.isEmpty()) {
+                        sateOfCurrentDay.value.currentTemp + "°C"
+                    } else {
+                        sateOfCurrentDay.value.currentTemp.toFloat().toInt().toString() + "°C"
+                    },
                     style = TextStyle(fontSize = 65.sp)
                 )
                 Text(
-                    text = "Sunny",
+                    text = sateOfCurrentDay.value.condition,
                     style = TextStyle(fontSize = 16.sp)
                 )
                 Row(
@@ -83,7 +86,7 @@ fun MainCard() {
                         )
                     }
                     Text(
-                        text = "24°C / 48°C",
+                        text = "${sateOfCurrentDay.value.maxTemp}°C  /  ${sateOfCurrentDay.value.minTemp}°C",
                         style = TextStyle(fontSize = 16.sp)
                     )
                     IconButton(onClick = { /*TODO*/ }) {
